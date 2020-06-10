@@ -56,15 +56,16 @@ class GTDatabaseGenerator(KittiDataset):
             pts_lidar = self.get_lidar(sample_id)
             calib = self.get_calib(sample_id)
             pts_rect = calib.lidar_to_rect(pts_lidar[:, 0:3])
+            print('pts_rect shape:{}'.format(pts_rect.shape))
             pts_intensity = pts_lidar[:, 3]
-
+            # print('pts_rect:{}'.format(pts_rect))
             obj_list = self.filtrate_objects(self.get_label(sample_id))
 
             gt_boxes3d = np.zeros((obj_list.__len__(), 7), dtype=np.float32)
             for k, obj in enumerate(obj_list):
                 gt_boxes3d[k, 0:3], gt_boxes3d[k, 3], gt_boxes3d[k, 4], gt_boxes3d[k, 5], gt_boxes3d[k, 6] \
                     = obj.pos, obj.h, obj.w, obj.l, obj.ry
-
+                # print('obj_list:{}{}'.format(k, obj.pos ))
             if gt_boxes3d.__len__() == 0:
                 print('No gt object')
                 continue
@@ -73,7 +74,11 @@ class GTDatabaseGenerator(KittiDataset):
 
             for k in range(boxes_pts_mask_list.__len__()):
                 pt_mask_flag = (boxes_pts_mask_list[k].numpy() == 1)
+                print('boxes_pts_mask_list:{}'.format(boxes_pts_mask_list[k]))
+                print('boxes_pts_mask_list.numpy:{}'.format(boxes_pts_mask_list[k].numpy()))
+                print('pt_mask_flag:{}'.format(pt_mask_flag))
                 cur_pts = pts_rect[pt_mask_flag].astype(np.float32)
+                print('cur_pts shape:{}'.format(cur_pts.shape))
                 cur_pts_intensity = pts_intensity[pt_mask_flag].astype(np.float32)
                 sample_dict = {'sample_id': sample_id,
                                'cls_type': obj_list[k].cls_type,

@@ -36,14 +36,22 @@ def pts_in_boxes3d_cpu(pts, boxes3d):
     """
     if not pts.is_cuda:
         pts = pts.float().contiguous()
+        # print('pts:{}'.format(len(pts)))
         boxes3d = boxes3d.float().contiguous()
+        print('boxes3d:{}'.format(len(boxes3d)))
         pts_flag = torch.LongTensor(torch.Size((boxes3d.size(0), pts.size(0))))  # (M, N)
+
         roipool3d_cuda.pts_in_boxes3d_cpu(pts_flag, pts, boxes3d)
 
         boxes_pts_mask_list = []
         for k in range(0, boxes3d.shape[0]):
             cur_mask = pts_flag[k] > 0
             boxes_pts_mask_list.append(cur_mask)
+            p = 0
+            for s in cur_mask:
+                if s:
+                    p += 1
+            # print('p:{}'.format(p))
         return boxes_pts_mask_list
     else:
         raise NotImplementedError
