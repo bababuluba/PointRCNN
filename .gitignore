@@ -5,6 +5,7 @@
 /output
 *.cu.o
 /data
+.idea
 **/build
 *.png
 **/*.egg-info
