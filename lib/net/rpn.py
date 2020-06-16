@@ -20,6 +20,7 @@ class RPN(nn.Module):
         cls_layers = []
         pre_channel = cfg.RPN.FP_MLPS[0][-1]
         for k in range(0, cfg.RPN.CLS_FC.__len__()):
+            print("classsification branch: in layer{} out layer{}".format(pre_channel,cfg.RPN.CLS_FC[k]))
             cls_layers.append(pt_utils.Conv1d(pre_channel, cfg.RPN.CLS_FC[k], bn=cfg.RPN.USE_BN))
             pre_channel = cfg.RPN.CLS_FC[k]
         cls_layers.append(pt_utils.Conv1d(pre_channel, 1, activation=None))

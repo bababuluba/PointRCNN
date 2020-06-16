@@ -33,7 +33,7 @@ parser.add_argument('--mgpus', action='store_true', default=False, help='whether
 parser.add_argument("--ckpt", type=str, default=None, help="continue training from this checkpoint")
 parser.add_argument("--rpn_ckpt", type=str, default=None, help="specify the well-trained rpn checkpoint")
 
-parser.add_argument("--gt_database", type=str, default='gt_database/train_gt_database_3level_Cyclist.pkl',
+parser.add_argument("--gt_database", type=str, default='gt_database/train_gt_database_3level_Pedestrian.pkl',
                     help='generated gt database for augmentation')
 parser.add_argument("--rcnn_training_roi_dir", type=str, default=None,
                     help='specify the saved rois for rcnn training when using rcnn_offline mode')
@@ -192,6 +192,7 @@ if __name__ == "__main__":
 
     # create dataloader & network & optimizer
     train_loader, test_loader = create_dataloader(logger)
+    #start constract net
     model = PointRCNN(num_classes=train_loader.dataset.num_class, use_xyz=True, mode='TRAIN')
     optimizer = create_optimizer(model)
 

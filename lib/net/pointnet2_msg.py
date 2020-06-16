@@ -19,10 +19,11 @@ class Pointnet2MSG(nn.Module):
         for k in range(cfg.RPN.SA_CONFIG.NPOINTS.__len__()):
             mlps = cfg.RPN.SA_CONFIG.MLPS[k].copy()
             channel_out = 0
+            print("mlps{}".format(mlps))
             for idx in range(mlps.__len__()):
                 mlps[idx] = [channel_in] + mlps[idx]
                 channel_out += mlps[idx][-1]
-
+                print("k:{};idx:{};channel_in:{}AFTER mlps[idx]{} channel out{}".format(k,idx,channel_in,mlps[idx], channel_out))
             self.SA_modules.append(
                 PointnetSAModuleMSG(
                     npoint=cfg.RPN.SA_CONFIG.NPOINTS[k],
