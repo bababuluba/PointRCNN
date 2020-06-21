@@ -15,7 +15,7 @@ class RPN(nn.Module):
 
         MODEL = importlib.import_module(cfg.RPN.BACKBONE)
         self.backbone_net = MODEL.get_model(input_channels=int(cfg.RPN.USE_INTENSITY), use_xyz=use_xyz)
-
+        print("backbone:{}".format(self.backbone_net))
         # classification branch
         cls_layers = []
         pre_channel = cfg.RPN.FP_MLPS[0][-1]

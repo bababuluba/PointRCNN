@@ -13,7 +13,7 @@ class PointRCNN(nn.Module):
 
         if cfg.RPN.ENABLED:
             self.rpn = RPN(use_xyz=use_xyz, mode=mode)
-
+            print("rpn net:{}".format(self.rpn))
         if cfg.RCNN.ENABLED:
             rcnn_input_channels = 128  # channels of rpn features
             if cfg.RCNN.BACKBONE == 'pointnet':

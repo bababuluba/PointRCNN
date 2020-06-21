@@ -19,11 +19,9 @@ class Pointnet2MSG(nn.Module):
         for k in range(cfg.RPN.SA_CONFIG.NPOINTS.__len__()):
             mlps = cfg.RPN.SA_CONFIG.MLPS[k].copy()
             channel_out = 0
-            print("mlps{}".format(mlps))
             for idx in range(mlps.__len__()):
                 mlps[idx] = [channel_in] + mlps[idx]
                 channel_out += mlps[idx][-1]
-                print("k:{};idx:{};channel_in:{}AFTER mlps[idx]{} channel out{}".format(k,idx,channel_in,mlps[idx], channel_out))
             self.SA_modules.append(
                 PointnetSAModuleMSG(
                     npoint=cfg.RPN.SA_CONFIG.NPOINTS[k],
@@ -62,10 +60,13 @@ class Pointnet2MSG(nn.Module):
             li_xyz, li_features = self.SA_modules[i](l_xyz[i], l_features[i])
             l_xyz.append(li_xyz)
             l_features.append(li_features)
-
+            print("l_xyz:{}".format(li_xyz.shape))
+            print("l_feature:{}".format(li_features.shape))
         for i in range(-1, -(len(self.FP_modules) + 1), -1):
             l_features[i - 1] = self.FP_modules[i](
                 l_xyz[i - 1], l_xyz[i], l_features[i - 1], l_features[i]
             )
-
+            print("i:{}".format(i))
+            print("l_xyz(i-1):{} l_xyz(i):{} ".format(l_xyz[i-1].shape, l_xyz[i].shape))
+            print("l_features(i-1):{} l_features(i):{} ".format(l_features[i - 1].shape, l_features[i].shape))
         return l_xyz[0], l_features[0]
